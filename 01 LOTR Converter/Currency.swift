@@ -47,4 +47,14 @@ enum Currency: Double, CaseIterable, Identifiable {
             "Copper Penny"
         }
     }
+    
+    func convert(amountString: String, currency: Currency) -> String {
+        guard let doubleAmount = Double(amountString) else {
+            return "Numbers only!"
+        }
+        
+        let convertedAmount = String((doubleAmount / self.rawValue) * currency.rawValue)
+        
+        return convertedAmount
+    }
 }
