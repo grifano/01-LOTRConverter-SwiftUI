@@ -71,11 +71,6 @@ struct ContentView: View {
                         .font(.title2)
                         .foregroundStyle(.black)
                         .focused($leftTyping)
-                        .onChange(of: leftAmount) {
-                            if leftTyping {
-                                rightAmount = leftCurrency.convert(leftAmount, to: rightCurrency)
-                            }
-                        }
                     }
                     
                     // =
@@ -112,17 +107,13 @@ struct ContentView: View {
                             .clipShape(.capsule)
                             .font(.title2)
                             .focused($rightTyping)
-                            .onChange(of: rightAmount) {
-                                if rightTyping {
-                                    leftAmount = rightCurrency.convert(rightAmount, to: leftCurrency)
-                                }
-                            }
                     }
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 24)
                 .frame(maxWidth: .infinity)
                 .background(.black.opacity(0.5))
+                .keyboardType(.decimalPad)
                 
                 Spacer()
                 
@@ -139,17 +130,27 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
-        .sheet(isPresented: $showExchangeInfoSheet) {
-            ExchangeInfoSheetView()
+        .onChange(of: leftAmount) {
+            if leftTyping {
+                rightAmount = leftCurrency.convert(leftAmount, to: rightCurrency)
+            }
         }
-        .sheet(isPresented: $showSelectCurrencySheet) {
-            SelectCurrencyView(topCurrency: $leftCurrency, bottomCurrency: $rightCurrency)
+        .onChange(of: rightAmount) {
+            if rightTyping {
+                leftAmount = rightCurrency.convert(rightAmount, to: leftCurrency)
+            }
         }
         .onChange(of: leftCurrency) {
             rightAmount = leftCurrency.convert(leftAmount, to: rightCurrency)
         }
         .onChange(of: rightCurrency) {
             leftAmount = rightCurrency.convert(rightAmount, to: leftCurrency)
+        }
+        .sheet(isPresented: $showExchangeInfoSheet) {
+            ExchangeInfoSheetView()
+        }
+        .sheet(isPresented: $showSelectCurrencySheet) {
+            SelectCurrencyView(topCurrency: $leftCurrency, bottomCurrency: $rightCurrency)
         }
     }
 }
