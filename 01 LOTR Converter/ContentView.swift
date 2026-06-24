@@ -14,8 +14,11 @@ struct ContentView: View {
     @State var leftAmount = ""
     @State var rightAmount = ""
     
-    @State var leftCurrency: Currency = .goldPenny
-    @State var rightCurrency: Currency = .silverPenny
+    @FocusState var leftTyping
+    @FocusState var rightTyping
+    
+    @State var leftCurrency: Currency = .goldPiece
+    @State var rightCurrency: Currency = .silverPiece
     
     var body: some View {
         ZStack {
@@ -61,12 +64,18 @@ struct ContentView: View {
                         // Text Field
                         TextField(text: $leftAmount, prompt: Text("Amount").foregroundStyle(.black.opacity(0.4))) {
                         }
-                            .frame(maxWidth: .infinity, minHeight: 44)
-                            .padding(.horizontal, 10)
-                            .background(.white)
-                            .clipShape(.capsule)
-                            .font(.title2)
-                            .foregroundStyle(.black)
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .padding(.horizontal, 10)
+                        .background(.white)
+                        .clipShape(.capsule)
+                        .font(.title2)
+                        .foregroundStyle(.black)
+                        .focused($leftTyping)
+                        .onChange(of: leftAmount) {
+                            if leftTyping {
+                                rightAmount = leftCurrency.convert(leftAmount, to: rightCurrency)
+                            }
+                        }
                     }
                     
                     // =
@@ -102,6 +111,12 @@ struct ContentView: View {
                             .background(.white)
                             .clipShape(.capsule)
                             .font(.title2)
+                            .focused($rightTyping)
+                            .onChange(of: rightAmount) {
+                                if rightTyping {
+                                    leftAmount = rightCurrency.convert(rightAmount, to: leftCurrency)
+                                }
+                            }
                     }
                 }
                 .padding(.horizontal, 16)
@@ -130,9 +145,14 @@ struct ContentView: View {
         .sheet(isPresented: $showSelectCurrencySheet) {
             SelectCurrencyView(topCurrency: $leftCurrency, bottomCurrency: $rightCurrency)
         }
+        .onChange(of: leftCurrency) {
+            rightAmount = leftCurrency.convert(leftAmount, to: rightCurrency)
+        }
+        .onChange(of: rightCurrency) {
+            leftAmount = rightCurrency.convert(rightAmount, to: leftCurrency)
+        }
     }
 }
-
 #Preview {
     ContentView()
 }
