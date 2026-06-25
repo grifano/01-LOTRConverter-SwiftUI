@@ -23,13 +23,14 @@ struct ExchangeInfoSheetView: View {
                 Text("Exchange Rates")
                     .font(.largeTitle)
                     .tracking(1.5)
-                    .padding(.bottom, 12)
+                    .padding(.bottom, 8)
                 
                 // Description
                 Text("Here at the Prancing Pony, we are happy to offer you a place where you can exchange all the known currencies in the entire world except one. We used to take Brandy Bucks, but after finding out that it was a person instead of a piece of paper, we realized it had no value to us. Below is a simple guide to our currency exchange rates:")
-                    .font(.title2)
+                    .font(.title3)
                     .lineSpacing(7)
-                    .padding(.bottom, 12)
+                    .padding(.horizontal,16)
+                    .padding(.bottom,8)
                 
                 // Currency Exchange Details Row
                 VStack {
@@ -38,7 +39,9 @@ struct ExchangeInfoSheetView: View {
                     ExchangeRateView(leftCurrencyIcon: .goldpenny, rateNoteText: "1 Gold Penny = 4 Silver Pieces", rightCurrencyIcon: .silverpiece)
                     ExchangeRateView(leftCurrencyIcon: .silverpiece, rateNoteText: "1 Silver Piece = 4 Silver Pennies", rightCurrencyIcon: .silverpenny)
                     ExchangeRateView(leftCurrencyIcon: .silverpenny, rateNoteText: "1 Silver Penny = 100 Copper Pennies", rightCurrencyIcon: .copperpenny)
+                    ExchangeRateView(leftCurrencyIcon: .copperpenny, rateNoteText: "1 Copper Penny = 4 Copper Bits", rightCurrencyIcon: .copperbit)
                 }
+                .padding(4)
                 
                 // Dismiss Button
                 Button() {
@@ -74,9 +77,8 @@ struct ExchangeInfoSheetView: View {
                         .buttonStyle(.plain)
                         .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 4)
                 }
-                .padding(.top, 16)
+                .padding(16)
             }
-            .padding(10)
         }
         .foregroundStyle(.black)
     }
