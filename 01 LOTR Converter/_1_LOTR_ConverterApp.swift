@@ -11,7 +11,7 @@ import SwiftUI
 struct _1_LOTR_ConverterApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(leftCurrency: .copperBit, rightCurrency: .copperPenny)
         }
     }
 }

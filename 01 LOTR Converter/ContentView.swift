@@ -7,7 +7,7 @@
 
 // 🏆 Coding Challenges
 // 1. ✅ Add one more currency
-// 2. Persist Currency, after app close, save last selected currencies.
+// 2. ✅ Persist Currency, after app close, save last selected currencies.
 // 3. Dismiss keyboard
 // 4. Refactor Currency Convertion Section. Move to separet file.
 
@@ -26,8 +26,8 @@ struct ContentView: View {
     @FocusState var leftTyping
     @FocusState var rightTyping
     
-    @State var leftCurrency: Currency = .goldPiece
-    @State var rightCurrency: Currency = .silverPiece
+    @State var leftCurrency: Currency
+    @State var rightCurrency: Currency
     
     var body: some View {
         ZStack {
@@ -157,9 +157,11 @@ struct ContentView: View {
         }
         .onChange(of: leftCurrency) {
             rightAmount = leftCurrency.convert(leftAmount, to: rightCurrency)
+            UserDefaults.standard.set(leftCurrency.rawValue, forKey: "Left Currency")
         }
         .onChange(of: rightCurrency) {
             leftAmount = rightCurrency.convert(rightAmount, to: leftCurrency)
+            UserDefaults.standard.set(rightCurrency.rawValue, forKey: "Right Currency")
         }
         .sheet(isPresented: $showExchangeInfoSheet) {
             ExchangeInfoSheetView()
@@ -167,8 +169,15 @@ struct ContentView: View {
         .sheet(isPresented: $showSelectCurrencySheet) {
             SelectCurrencyView(topCurrency: $leftCurrency, bottomCurrency: $rightCurrency)
         }
+        .onAppear() {
+            let storredLeftCurrencyRawValue = UserDefaults.standard.double(forKey: "Left Currency")
+            let storredRightCurrencyRawValue = UserDefaults.standard.double(forKey: "Right Currency")
+            
+            leftCurrency = Currency(rawValue: storredLeftCurrencyRawValue) ?? .goldPenny
+            rightCurrency = Currency(rawValue: storredRightCurrencyRawValue) ?? .silverPenny
+        }
     }
 }
 #Preview {
-    ContentView()
+    ContentView(leftCurrency: .copperBit, rightCurrency: .copperPenny)
 }
