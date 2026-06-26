@@ -52,35 +52,11 @@ struct ContentView: View {
                 // Curencies Section
                 HStack {
                     // Left Currency Block
-                    VStack {
-                        // Select Left Currency
-                        HStack {
-                            // Currency Image
-                            Image(leftCurrency.image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 33)
-                            
-                            // Currency Name
-                            Text(leftCurrency.name)
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                        }
-                        .onTapGesture {
-                            showSelectCurrencySheet.toggle()
-                            currencyTip.invalidate(reason: .actionPerformed)
-                        }
-                        
-                        // Text Field
-                        TextField(text: $leftAmount, prompt: Text("Amount").foregroundStyle(.black.opacity(0.4))) {
-                        }
-                        .frame(maxWidth: .infinity, minHeight: 44)
-                        .padding(.horizontal, 10)
-                        .background(.white)
-                        .clipShape(.capsule)
-                        .font(.title2)
-                        .foregroundStyle(.black)
-                        .focused($leftTyping)
+                    CurrencyField(currency: $leftCurrency, currencyAmount: $leftAmount, isFocused: $leftTyping, onTap: {
+                        showSelectCurrencySheet.toggle()
+                    })
+                    .onTapGesture {
+                        currencyTip.invalidate(reason: .actionPerformed)
                     }
                     .popoverTip(currencyTip, arrowEdge: .bottom)
                     
@@ -91,35 +67,9 @@ struct ContentView: View {
                         .symbolEffect(.pulse)
                     
                     // Right Currency Block
-                    VStack {
-                        // Select Right Currency
-                        HStack {
-                            // Currency Name
-                            Text(rightCurrency.name)
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                            
-                            // Currency Image
-                            Image(rightCurrency.image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 33)
-                        }
-                        .onTapGesture {
-                            showSelectCurrencySheet.toggle()
-                            currencyTip.invalidate(reason: .actionPerformed)
-                        }
-                        
-                        // Text Field
-                        TextField("Amount", text: $rightAmount, prompt: Text("Amount").foregroundStyle(.black.opacity(0.4)))
-                            .frame(maxWidth: .infinity, minHeight: 44)
-                            .padding(.horizontal, 10)
-                            .multilineTextAlignment(.trailing)
-                            .background(.white)
-                            .clipShape(.capsule)
-                            .font(.title2)
-                            .focused($rightTyping)
-                    }
+                    CurrencyField(currency: $rightCurrency, currencyAmount: $rightAmount, isFocused: $rightTyping, onTap: {
+                        showSelectCurrencySheet.toggle()
+                    })
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 24)
