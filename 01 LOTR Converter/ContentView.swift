@@ -9,7 +9,7 @@
 // 1. ✅ Add one more currency
 // 2. ✅ Persist Currency, after app close, save last selected currencies.
 // 3. ✅ Dismiss keyboard
-// 4. Refactor Currency Convertion Section. Move to separet file.
+// 4. ✅ Refactor Currency Convertion Section. Move to separet file.
 
 import SwiftUI
 import TipKit
